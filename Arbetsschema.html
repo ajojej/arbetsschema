@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbetsschema & Dygnsvila</title>
+    <script>
+        function beräknaNästaPass() {
+            let utringningTid = document.getElementById("utringningTid").value;
+            let arbetstid = parseFloat(document.getElementById("arbetstid").value) || 0;
+            
+            let utringningDate = new Date(utringningTid);
+            
+            if (isNaN(utringningDate.getTime())) {
+                alert("Vänligen fyll i en giltig tid för utringning.");
+                return;
+            }
+            
+            // Beräkna hemkomsttid
+            let hemkomstTid = new Date(utringningDate.getTime());
+            hemkomstTid.setHours(hemkomstTid.getHours() + arbetstid);
+            
+            // Beräkna nästa arbetspass efter 8h vila
+            let nästaPass8h = new Date(hemkomstTid.getTime());
+            nästaPass8h.setHours(nästaPass8h.getHours() + 8);
+            
+            // Beräkna nästa arbetspass efter 11h vila
+            let nästaPass11h = new Date(hemkomstTid.getTime());
+            nästaPass11h.setHours(nästaPass11h.getHours() + 11);
+            
+            document.getElementById("hemkomstTid").textContent = "Hemkomsttid: " + hemkomstTid.toLocaleString();
+            document.getElementById("nästaPass8h").textContent = "Nästa arbetspass efter 8h vila: " + nästaPass8h.toLocaleString();
+            document.getElementById("nästaPass11h").textContent = "Nästa arbetspass efter 11h vila: " + nästaPass11h.toLocaleString();
+        }
+    </script>
+</head>
+<body>
+    <h2>Arbetsschema & Dygnsvila enligt Seko</h2>
+    <p>Ordinarie arbetstid: 07:00 - 16:00</p>
+    <p>Regler enligt Seko:</p>
+    <ul>
+        <li>Minst 11 timmars sammanhängande dygnsvila per 24-timmarsperiod</li>
+        <li>Minst 36 timmars sammanhängande veckovila varje sjudagarsperiod</li>
+    </ul>
+    
+    <h3>Utringning på obekväm arbetstid</h3>
+    <label for="utringningTid">Tidpunkt för utringning:</label>
+    <input type="datetime-local" id="utringningTid">
+    
+    <label for="arbetstid">Arbetstid (timmar):</label>
+    <input type="number" id="arbetstid" min="0" step="0.5">
+    
+    <button onclick="beräknaNästaPass()">Beräkna</button>
+    
+    <p id="hemkomstTid"></p>
+    <p id="nästaPass8h"></p>
+    <p id="nästaPass11h"></p>
+</body>
+</html>
